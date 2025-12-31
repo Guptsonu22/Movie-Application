@@ -16,7 +16,7 @@ exports.authenticate = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret_key_12345');
 
     let user;
     if (mongoose.Types.ObjectId.isValid(decoded.id)) {
