@@ -6,8 +6,9 @@ const User = require('../models/User');
 const router = express.Router();
 
 // Generate JWT Token
+// Generate JWT Token
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'fallback_secret_key_12345', {
     expiresIn: process.env.JWT_EXPIRE || '7d'
   });
 };
