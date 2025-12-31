@@ -56,7 +56,7 @@ router.get('/', [
     console.error('Get movies error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error fetching movies'
+      message: 'Error fetching movies: ' + (error.message || 'Unknown error')
     });
   }
 });
