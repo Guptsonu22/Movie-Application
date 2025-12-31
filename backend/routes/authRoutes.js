@@ -146,14 +146,20 @@ router.post('/login', [
       } else {
         // Not found in DB or DB offline, check Mock Store
         // Case insensitive check
-        const mockUser = MOCK_USERS.find(u => u.email.toLowerCase() === email.toLowerCase());
+        const mockUser = MOCK_USERS.find(u => u.email.toLowerCase() === (email || '').toLowerCase());
         if (mockUser) {
           user = mockUser;
           isPasswordValid = mockUser.password === password;
         }
       }
     } catch (dbError) {
-      console.warn('Login logic error:', dbError);
+      console.error('Login logic error:', dbError);
+      // Fallback to mock if catastrophic failure
+      const mockUser = MOCK_USERS.find(u => u.email.toLowerCase() === (email || '').toLowerCase());
+      if (mockUser) {
+        user = mockUser;
+        isPasswordValid = mockUser.password === password;
+      }
     }
 
     if (!user || !isPasswordValid) {
@@ -180,7 +186,7 @@ router.post('/login', [
     console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error during login'
+      message: 'Server error during login: ' + error.message // Expose error for debugging
     });
   }
 });
