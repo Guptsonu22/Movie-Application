@@ -25,7 +25,6 @@ router.post('/register', [
     .withMessage('Username must be between 3 and 30 characters'),
   body('email')
     .isEmail()
-    .normalizeEmail()
     .withMessage('Please provide a valid email'),
   body('password')
     .isLength({ min: 6 })
